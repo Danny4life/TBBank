@@ -2,9 +2,11 @@ package com.osiki.TBBank.service.impl;
 
 import com.osiki.TBBank.dto.AccountInfo;
 import com.osiki.TBBank.dto.BankResponse;
+import com.osiki.TBBank.dto.EmailDetails;
 import com.osiki.TBBank.dto.UserRequest;
 import com.osiki.TBBank.entity.User;
 import com.osiki.TBBank.repository.UserRepository;
+import com.osiki.TBBank.service.EmailService;
 import com.osiki.TBBank.service.UserService;
 import com.osiki.TBBank.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    EmailService emailService;
     @Override
     public BankResponse createUserAccount(UserRequest userRequest) {
 
@@ -51,6 +56,17 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         User savedUser = userRepository.save(newUser);
+
+        // send email alert
+
+        EmailDetails emailDetails = EmailDetails.builder()
+                .recipient(savedUser.getEmail())
+                .subject("ACCOUNT CREATION")
+                .messageBody("Congratulations! Your Account Has Been Successfully Created.\n Your Account Details: \n" +
+                        "Account Name: " + savedUser.getFirstName() + " " + savedUser.getLastName() + " " + savedUser.getOtherName() +
+                        "\nAccount Number: " + savedUser.getAccountNumber())
+                .build();
+        emailService.sendEmailAlert(emailDetails);
 
         return BankResponse.builder()
                 .responseCode(AccountUtils.ACCOUNT_CREATION_SUCCESS_CODE)
