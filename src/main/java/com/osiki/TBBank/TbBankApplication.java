@@ -10,8 +10,6 @@ public class TbBankApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TbBankApplication.class, args);
-
-		System.out.println(Year.now());
 	}
 
 }

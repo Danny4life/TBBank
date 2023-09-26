@@ -1,9 +1,6 @@
 package com.osiki.TBBank.service.impl;
 
-import com.osiki.TBBank.dto.AccountInfo;
-import com.osiki.TBBank.dto.BankResponse;
-import com.osiki.TBBank.dto.EmailDetails;
-import com.osiki.TBBank.dto.UserRequest;
+import com.osiki.TBBank.dto.*;
 import com.osiki.TBBank.entity.User;
 import com.osiki.TBBank.repository.UserRepository;
 import com.osiki.TBBank.service.EmailService;
@@ -77,5 +74,47 @@ public class UserServiceImpl implements UserService {
                         .accountName(savedUser.getFirstName() + " " + savedUser.getLastName() + " " + savedUser.getOtherName())
                         .build())
                 .build();
+    }
+
+    @Override
+    public BankResponse balanceEnquiry(EnquiryRequest request) {
+
+        // check if the provided account number exists in the db
+
+        boolean isAccountExists = userRepository.existsByAccountNumber(request.getAccountNumber());
+
+
+        if(!isAccountExists){
+            return BankResponse.builder()
+                    .responseCode(AccountUtils.ACCOUNT_NUMBER_NON_EXISTS_CODE)
+                    .responseMessage(AccountUtils.ACCOUNT_NUMBER_NON_EXISTS_MESSAGE)
+                    .accountInfo(null)
+                    .build();
+        }
+
+        // if account number exists
+
+        User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
+        return BankResponse.builder()
+                .responseCode(AccountUtils.ACCOUNT_NUMBER_FOUND_CODE)
+                .responseMessage(AccountUtils.ACCOUNT_NUMBER_FOUND_MESSAGE)
+                .accountInfo(AccountInfo.builder()
+                        .accountBalance(foundUser.getAccountBalance())
+                        .accountNumber(request.getAccountNumber())
+                        .accountName(foundUser.getFirstName() + " " + foundUser.getLastName() + " " + foundUser.getOtherName())
+                        .build())
+                .build();
+    }
+
+    @Override
+    public String nameEnquiry(EnquiryRequest request) {
+        boolean isAccountExist = userRepository.existsByAccountNumber(request.getAccountNumber());
+
+        if(!isAccountExist){
+            return AccountUtils.ACCOUNT_NUMBER_NON_EXISTS_MESSAGE;
+        }
+
+        User foundUser = userRepository.findByAccountNumber(request.getAccountNumber());
+        return foundUser.getFirstName() + " " + foundUser.getLastName() + " " + foundUser.getOtherName();
     }
 }

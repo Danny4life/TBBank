@@ -1,9 +1,13 @@
 package com.osiki.TBBank.service;
 
 import com.osiki.TBBank.dto.BankResponse;
+import com.osiki.TBBank.dto.EnquiryRequest;
 import com.osiki.TBBank.dto.UserRequest;
 
 public interface UserService {
 
-    BankResponse createUserAccount(UserRequest userRequest);
+    BankResponse createUserAccount(UserRequest request);
+
+    BankResponse balanceEnquiry(EnquiryRequest enquiryRequest);
+    String nameEnquiry(EnquiryRequest enquiryRequest);
 }

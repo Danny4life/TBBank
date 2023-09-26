@@ -1,13 +1,11 @@
 package com.osiki.TBBank.controller;
 
 import com.osiki.TBBank.dto.BankResponse;
+import com.osiki.TBBank.dto.EnquiryRequest;
 import com.osiki.TBBank.dto.UserRequest;
 import com.osiki.TBBank.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/users")
@@ -19,5 +17,16 @@ public class UserController {
     @PostMapping
     public BankResponse createAccount(@RequestBody UserRequest userRequest){
         return userService.createUserAccount(userRequest);
+    }
+
+    @GetMapping("/balance-enquiry")
+
+    public BankResponse balanceEnquiry(@RequestBody EnquiryRequest request){
+        return  userService.balanceEnquiry(request);
+    }
+
+    @GetMapping("/name-enquiry")
+    public String nameEnquiry(@RequestBody EnquiryRequest request){
+        return userService.nameEnquiry(request);
     }
 }
