@@ -1,6 +1,7 @@
 package com.osiki.TBBank.controller;
 
 import com.osiki.TBBank.dto.BankResponse;
+import com.osiki.TBBank.dto.CreditAndDebitRequest;
 import com.osiki.TBBank.dto.EnquiryRequest;
 import com.osiki.TBBank.dto.UserRequest;
 import com.osiki.TBBank.service.UserService;
@@ -28,5 +29,10 @@ public class UserController {
     @GetMapping("/name-enquiry")
     public String nameEnquiry(@RequestBody EnquiryRequest request){
         return userService.nameEnquiry(request);
+    }
+
+    @PostMapping("/credit-account")
+    public BankResponse creditAccount(@RequestBody CreditAndDebitRequest request){
+        return userService.creditAccount(request);
     }
 }

@@ -17,6 +17,9 @@ public class AccountUtils {
     public static final String ACCOUNT_NUMBER_FOUND_CODE = "004";
     public static final String ACCOUNT_NUMBER_FOUND_MESSAGE = "Account number found";
 
+    public static final String ACCOUNT_CREDITED_SUCCESS_CODE = "005";
+    public static final String ACCOUNT_CREDITED_SUCCESS_MESSAGE = "Account credited successfully!";
+
 
 
 
