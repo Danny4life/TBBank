@@ -1,9 +1,6 @@
 package com.osiki.TBBank.service;
 
-import com.osiki.TBBank.dto.BankResponse;
-import com.osiki.TBBank.dto.CreditAndDebitRequest;
-import com.osiki.TBBank.dto.EnquiryRequest;
-import com.osiki.TBBank.dto.UserRequest;
+import com.osiki.TBBank.dto.*;
 
 public interface UserService {
 
@@ -15,4 +12,7 @@ public interface UserService {
     BankResponse creditAccount(CreditAndDebitRequest request);
 
     BankResponse debitAccount(CreditAndDebitRequest request);
+
+    BankResponse transfer(TransferRequest request);
+
 }
