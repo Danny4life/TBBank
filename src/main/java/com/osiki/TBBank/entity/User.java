@@ -37,6 +37,7 @@ public class User {
     private String alternativeNumber;
 
     private String email;
+    private String password;
 
     private String status;
 
