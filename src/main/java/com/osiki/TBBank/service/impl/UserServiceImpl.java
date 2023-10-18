@@ -1,5 +1,6 @@
 package com.osiki.TBBank.service.impl;
 
+import com.osiki.TBBank.config.JwtTokenProvider;
 import com.osiki.TBBank.dto.*;
 import com.osiki.TBBank.entity.User;
 import com.osiki.TBBank.repository.UserRepository;
@@ -8,6 +9,9 @@ import com.osiki.TBBank.service.TransactionService;
 import com.osiki.TBBank.service.UserService;
 import com.osiki.TBBank.utils.AccountUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +32,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    AuthenticationManager authenticationManager;
+
+    @Autowired
+    JwtTokenProvider jwtTokenProvider;
     @Override
     public BankResponse createUserAccount(UserRequest userRequest) {
 
@@ -83,6 +93,26 @@ public class UserServiceImpl implements UserService {
                         .accountNumber(savedUser.getAccountNumber())
                         .accountName(savedUser.getFirstName() + " " + savedUser.getLastName() + " " + savedUser.getOtherName())
                         .build())
+                .build();
+    }
+
+    public BankResponse login(LoginDto loginDto){
+        Authentication authentication = null;
+        authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword())
+        );
+
+        EmailDetails loginAlert = EmailDetails.builder()
+                .subject("You are logged in!")
+                .recipient(loginDto.getEmail())
+                .messageBody("You logged into your account. If you did not initiate this request, contact your bank immediately.")
+                .build();
+
+        emailService.sendEmailAlert(loginAlert);
+
+        return BankResponse.builder()
+                .responseCode("Login Successfully")
+                .responseMessage(jwtTokenProvider.generateToken(authentication))
                 .build();
     }
 
