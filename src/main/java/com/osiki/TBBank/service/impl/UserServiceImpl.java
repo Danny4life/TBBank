@@ -2,6 +2,7 @@ package com.osiki.TBBank.service.impl;
 
 import com.osiki.TBBank.config.JwtTokenProvider;
 import com.osiki.TBBank.dto.*;
+import com.osiki.TBBank.entity.Role;
 import com.osiki.TBBank.entity.User;
 import com.osiki.TBBank.repository.UserRepository;
 import com.osiki.TBBank.service.EmailService;
@@ -70,6 +71,7 @@ public class UserServiceImpl implements UserService {
                 .phoneNumber(userRequest.getPhoneNumber())
                 .alternativeNumber(userRequest.getAlternativeNumber())
                 .status("ACTIVE")
+                .role(Role.valueOf("ROLE_ADMIN"))
                 .build();
 
         User savedUser = userRepository.save(newUser);
