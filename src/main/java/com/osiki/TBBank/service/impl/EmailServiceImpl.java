@@ -1,6 +1,7 @@
 package com.osiki.TBBank.service.impl;
 
 import com.osiki.TBBank.dto.EmailDetails;
+import com.osiki.TBBank.exception.EmailNotSendException;
 import com.osiki.TBBank.service.EmailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -42,7 +43,7 @@ public class EmailServiceImpl implements EmailService {
 
             System.out.println("Mail sent successfully");
         } catch (MailException e) {
-            throw new RuntimeException(e);
+            throw new EmailNotSendException("Email not sent");
         }
 
     }
